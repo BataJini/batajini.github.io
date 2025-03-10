@@ -1,0 +1,124 @@
+{% load static %}
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="JobHub - Find your dream job today">
+    <meta name="keywords" content="jobs, career, employment, hiring, job search">
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}" />
+    <title>{% block title %}JobHub{% endblock %}</title>
+    {% bootstrap_css %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% block extra_css %}{% endblock %}
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #4a6cf7;
+        }
+        .nav-link {
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #4a6cf7;
+            border-color: #4a6cf7;
+        }
+        .btn-outline-primary {
+            color: #4a6cf7;
+            border-color: #4a6cf7;
+        }
+        .btn-outline-primary:hover {
+            background-color: #4a6cf7;
+            border-color: #4a6cf7;
+        }
+        .auth-container {
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            background-color: white;
+        }
+        .auth-title {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'authentication:home' %}">JobHub</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'authentication:home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'authentication:jobs' %}">Find Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    {% if user.is_authenticated %}
+                        <span class="me-3 d-flex align-items-center">{{ user.email }}</span>
+                        <a href="{% url 'authentication:logout' %}" class="btn btn-outline-primary">Logout</a>
+                    {% else %}
+                        <a href="{% url 'authentication:login' %}" class="btn btn-outline-primary me-2">Log In</a>
+                        <a href="{% url 'authentication:signup' %}" class="btn btn-primary">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white py-4 mt-5 border-top">
+        <div class="container text-center">
+            <div class="mb-3">
+                <a href="#" class="text-decoration-none text-secondary">Privacy Policy – Terms & Conditions</a>
+            </div>
+            <a href="{% url 'authentication:home' %}" class="text-decoration-none mb-3 d-block">
+                <span class="h5 text-primary fw-bold">JobHub</span>
+            </a>
+            <div class="text-secondary small">
+                Copyright © 2025 JobHub – All Rights Reserved
+            </div>
+        </div>
+    </footer>
+
+    {% bootstrap_javascript %}
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 
